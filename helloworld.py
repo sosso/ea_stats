@@ -8,7 +8,8 @@ app = Flask(__name__)
 def hello():
 #    self.response.headers['Content-Type'] = 'text/html'
 #    self.response.out.write()
-    return open('stats_current.html').read()
+    return open('static/stats_current.html').read()
+#    return app.send_static_file('static/stats_current.html')
 
 @app.route('/fetchstats')
 def fetch_stats():
