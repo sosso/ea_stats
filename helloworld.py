@@ -1,6 +1,7 @@
 from flask import Flask, request
 import download_ea_page
 import os
+import time
 
 app = Flask(__name__)
 
@@ -19,14 +20,20 @@ def fetch_stats():
 
 @app.route('/oldstats')
 def serve_old_stats():
-    oldpages = os.listdir('static')
+    oldpages = os.listdir("static")
     oldpages.sort()
-    if request.args['filename'] in oldpages:
+    filename = request.args.get('filename') or ''
+    if filename in oldpages:
         return open('static/%s' % request.args['filename']).read()
     else:
         links_html = ''
         for filename in oldpages:
-            links_html += '<a href=http://ea-stats.herokuapp.com/oldstats?filename="%s">%s</a><br>' % (filename, filename)
+            if filename != 'stats_current.html':
+                file_date = filename[:-5]
+                pretty = time.ctime(int(file_date))
+            else:
+                pretty = 'stats_current.html'
+            links_html += '<a href=http://ea-stats.herokuapp.com/oldstats?filename=%s>%s</a><br>' % (filename, pretty)
 
         return_html = '<html><body>' + links_html + '<body></html>'
         return return_html
