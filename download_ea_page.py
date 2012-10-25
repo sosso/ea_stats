@@ -23,7 +23,9 @@ def download_ea_page():
         import traceback
         print('generic exception: ' + traceback.format_exc())
         print('Unable to fetch page')
-    old_file = open('./static/stats_current.html', 'r').read()
+        stats_page = ''
+    try: old_file = open('./static/stats_current.html', 'r').read()
+    except: old_file = ''
     if stats_page != old_file:
         print('stats changed, writing new file')
         output = open('static/stats_current.html', 'w')
